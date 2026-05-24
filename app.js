@@ -1,11 +1,13 @@
 const express = require("express");
 const app = express();
 const { v4: uuidv4 } = require("uuid");
+var methodOverride = require('method-override');
 
 let port = 3000;
 
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 let posts = [
     {
@@ -60,12 +62,21 @@ app.post("/post/new", (req, res) => {
 app.get("/post/edit/:Id", (req, res) => {
     let {Id}=req.params;
     let post = posts.find(p => p.Id == Id);
-     console.log(`Id=${Id}, and detail = ${post}`);
     res.render("editpost.ejs",{post});
 })
 
+app.patch("/post/edit/:Id",(req,res)=>{
+let {Id}=req.params;
+let {content}=req.body;
+console.log(content);
+ let post = posts.find(p => p.Id == Id);
+post.content=content;
+res.redirect("/");
+})
 
-c
+
+
+
 //route for delete the posts
 app.delete("/post/delete", (req, res) => {
 
