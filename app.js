@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const { v4: uuidv4 } = require("uuid");
 var methodOverride = require('method-override');
-
 let port = 3000;
 
 app.set("view engine", "ejs");
@@ -60,27 +59,26 @@ app.post("/post/new", (req, res) => {
 
 //route for edit
 app.get("/post/edit/:Id", (req, res) => {
-    let {Id}=req.params;
+    let { Id } = req.params;
     let post = posts.find(p => p.Id == Id);
-    res.render("editpost.ejs",{post});
+    res.render("editpost.ejs", { post });
 })
 
-app.patch("/post/edit/:Id",(req,res)=>{
-let {Id}=req.params;
-let {content}=req.body;
-console.log(content);
- let post = posts.find(p => p.Id == Id);
-post.content=content;
-res.redirect("/");
+app.patch("/post/edit/:Id", (req, res) => {
+    let { Id } = req.params;
+    let { content } = req.body;
+    let post = posts.find(p => p.Id == Id);
+    post.content = content;
+    res.redirect("/");
 })
-
-
 
 
 //route for delete the posts
-app.delete("/post/delete", (req, res) => {
-
-
+app.delete("/post/delete/:Id", (req, res) => {
+    let { Id } = req.params;
+    console.log(Id);
+    posts = posts.filter(p => p.Id != Id);
+    res.redirect("/");
 })
 
 // route for student detailed view
@@ -90,6 +88,12 @@ app.get("/post/:Id", (req, res) => {
     console.log(`Id=${Id}, and detail = ${post}`);
     res.render("detailstudent.ejs", { post });
 })
+
+
+
+
+
+
 
 
 app.get("/:name/:Id", (req, res) => { // path parameters
